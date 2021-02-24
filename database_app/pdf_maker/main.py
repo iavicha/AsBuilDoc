@@ -1,3 +1,5 @@
+
+
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -6,8 +8,8 @@ from reportlab.lib.pagesizes import A4
 
 def make_act(act_model):
     pdfmetrics.registerFont(TTFont('DejaVuSerif', 'DejaVuSerif.ttf'))
-    pdfmetrics.registerFont(TTFont('NotoSans', 'NotoSans-Light.ttf'))
-    pdfmetrics.registerFont(TTFont('NotoSansregular', 'NotoSans-Regular.ttf'))
+    pdfmetrics.registerFont(TTFont('NotoSans', '../NotoSans-Light.ttf'))
+    pdfmetrics.registerFont(TTFont('NotoSansregular', '../NotoSans-Regular.ttf'))
 
     file = canvas.Canvas('test_pdf.pdf', pagesize=A4)
     file.setFont('NotoSansregular', 11)

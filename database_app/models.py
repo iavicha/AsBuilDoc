@@ -49,6 +49,9 @@ class Documents(models.Model):
     date_certificate_start = models.DateField(blank=True)
     date_certificate_emd = models.DateField(blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Material(models.Model):
     name = models.CharField(max_length=200)
@@ -87,8 +90,16 @@ class CommonFields(models.Model):
         abstract = True
 
 
+STATUS_CHOICES = [
+    ('d', 'Черновик'),
+    ('p', 'Распечатан'),
+    ('w', 'Подписан'),
+]
+
+
 class HiddenWorksSurveyCertificate(CommonFields):
     date_of_signature = models.DateField()
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     number = models.CharField(max_length=40)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     material = models.ManyToManyField(Material)
