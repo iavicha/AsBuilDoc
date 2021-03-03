@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.contrib.contenttypes.models import ContentType
-from django.http import Http404
+
+from .models import *
 from .views import some_view
 
 # Register your models here.
-
-from .models import *
 
 admin.site.register(Object)
 admin.site.register(Company)
@@ -14,49 +12,49 @@ admin.site.register(People)
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = ['name', '_next', 'start_date', 'end_date']
-    list_filter = ['start_date']
+    list_display = ["name", "_next", "start_date", "end_date"]
+    list_filter = ["start_date"]
 
 
 admin.site.register(Material)
 
 
 def make_published(modeladmin, request, queryset):
-    queryset.update(status='p')
+    queryset.update(status="p")
 
 
 make_published.short_description = "Пометить документы как распечатаные"
 
 
 def make_signature(modeladmin, request, queryset):
-    queryset.update(status='w')
+    queryset.update(status="w")
 
 
 make_signature.short_description = "Пометить документы как Подписанные"
 
 
 def make_draft(modeladmin, request, queryset):
-    queryset.update(status='d')
+    queryset.update(status="d")
 
 
 make_draft.short_description = "Пометить документы как черновик"
 
 
 def export_selected_objects(modeladmin, request, queryset):
-    queryset.update(status='p')
+    queryset.update(status="p")
 
     for i in queryset.values():
-        print(i['id'])
+        print(i["id"])
 
     return some_view(request, queryset)
 
 
-export_selected_objects.short_description = 'Распечатать документы'
+export_selected_objects.short_description = "Распечатать документы"
 
 
 class AdminHiddenWorksSurveyCertificate(admin.ModelAdmin):
-    list_display = ['number', 'job', 'date_of_signature', 'status']
-    list_filter = ['status']
+    list_display = ["number", "job", "date_of_signature", "status"]
+    list_filter = ["status"]
     actions = [make_published, make_signature, make_draft, export_selected_objects]
 
 

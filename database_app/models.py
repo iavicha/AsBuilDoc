@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib import admin
 
 
 class Object(models.Model):
@@ -32,7 +31,7 @@ class People(models.Model):
     name_for_admin = str
 
     def __str__(self):
-        return self.name + ' ' + self.company.name
+        return self.name + " " + self.company.name
 
 
 class Job(models.Model):
@@ -87,25 +86,20 @@ class CommonFields(models.Model):
     general_contractor = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_contractor")
     designer = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_designer")
     builder = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_builder")
-    customer_people = models.ForeignKey(People, on_delete=models.CASCADE,
-                                        related_name="%(class)s_cust_people", blank= True)
-    general_contractor_people = models.ForeignKey(People, on_delete=models.CASCADE,
-                                                  related_name="%(class)s_contractor_people", blank=True)
-    general_contractor_tech = models.ForeignKey(People, on_delete=models.CASCADE,
-                                                related_name="%(class)s_general_contractor_tech_people", blank=True)
-    designer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_designer_people",
-                                        blank=True)
-    builder_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_builder_people",
-                                       blank=True)
+    customer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_cust_people", blank=True)
+    general_contractor_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_contractor_people", blank=True)
+    general_contractor_tech = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_general_contractor_tech_people", blank=True)
+    designer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_designer_people", blank=True)
+    builder_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_builder_people", blank=True)
 
     class Meta:
         abstract = True
 
 
 STATUS_CHOICES = [
-    ('d', 'Черновик'),
-    ('p', 'Распечатан'),
-    ('w', 'Подписан'),
+    ("d", "Черновик"),
+    ("p", "Распечатан"),
+    ("w", "Подписан"),
 ]
 
 

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class DatabaseAppConfig(AppConfig):
-    name = 'database_app'
+    name = "database_app"
