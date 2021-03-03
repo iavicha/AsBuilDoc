@@ -16,6 +16,7 @@ class Company(models.Model):
     details = models.CharField(max_length=300)
     date_from = models.DateField()
     date_to = models.DateField()
+    _license = models.CharField(max_length=300, blank=True)
 
     def __str__(self):
         return self.name
@@ -24,13 +25,14 @@ class Company(models.Model):
 class People(models.Model):
     name = models.CharField(max_length=200)
     order = models.CharField(max_length=250)
-    order_file = models.FileField()
+    order_file = models.FileField(blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     _license = models.CharField(max_length=250)
-    _license_file = models.FileField()
+    _license_file = models.FileField(blank=True)
+    name_for_admin = str
 
     def __str__(self):
-        return self.name
+        return self.name + ' ' + self.company.name
 
 
 class Job(models.Model):
@@ -85,6 +87,16 @@ class CommonFields(models.Model):
     general_contractor = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_contractor")
     designer = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_designer")
     builder = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_builder")
+    customer_people = models.ForeignKey(People, on_delete=models.CASCADE,
+                                        related_name="%(class)s_cust_people", blank= True)
+    general_contractor_people = models.ForeignKey(People, on_delete=models.CASCADE,
+                                                  related_name="%(class)s_contractor_people", blank=True)
+    general_contractor_tech = models.ForeignKey(People, on_delete=models.CASCADE,
+                                                related_name="%(class)s_general_contractor_tech_people", blank=True)
+    designer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_designer_people",
+                                        blank=True)
+    builder_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_builder_people",
+                                       blank=True)
 
     class Meta:
         abstract = True
