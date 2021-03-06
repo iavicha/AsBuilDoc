@@ -23,7 +23,7 @@ def some_view(request, queryset):
             number = ""
             d = i["id"]
             act = HiddenWorksSurveyCertificate.objects.filter(id=d)
-            number = act.values("number")[0]["number"]
+            number = act.values("number")[0]['number']
             date = str(act.values("date_of_signature")[0]["date_of_signature"])
             object_ = str(act.values("_object__name")[0]["_object__name"])
             object_adr = str(act.values("_object__address")[0]["_object__address"])
@@ -44,8 +44,13 @@ def some_view(request, queryset):
             job_start_date = str(act.values("job__start_date")[0]["job__start_date"])
             job_end_date = str(act.values("job__end_date")[0]["job__end_date"])
             job_next = str(act.values("job___next")[0]["job___next"])
-            material_name = str(act.values("material__name")[0]["material__name"])
-            material_document_name = str(act.values("material__documents__name")[0]["material__documents__name"])
+            material_name = act.values("material").values_list("material__name")\
+                .values_list("material__documents__name")
+            # material_document_name = act.values("material__documents__name").values_list("material__documents__name")
+            # result = {}
+            # result[material_name] = material_document_name
+            # print(result)
+            print(material_name)
             # basedir = os.path.abspath(os.path.dirname(__file__))
             # material_certificate = os.path.join(basedir, str(act.values('material__documents__file')[0]['material__documents__file']))
             # print(material_certificate)
@@ -97,7 +102,8 @@ def some_view(request, queryset):
             file.drawString(40, 657, general_contractor_name + " " + general_contractor_adr)
             file.line(40, 655, 580, 655)
             file.setFont("NotoSans", 8)
-            file.drawString(100, 645, "(фамилия, имя, отчество , адрес места жительства, ОГРНИП, ИНН индивидуального " "предпринимателя,")
+            file.drawString(100, 645, "(фамилия, имя, отчество , адрес места жительства, ОГРНИП, ИНН индивидуального " 
+                                      "предпринимателя,")
             file.setFont("NotoSans", 12)
             file.drawString(40, 631, general_contractor_details)
             file.line(40, 629, 580, 629)
@@ -114,7 +120,8 @@ def some_view(request, queryset):
             file.drawString(40, 566, designer_name + " " + designer_adr)
             file.line(40, 564, 580, 564)
             file.setFont("NotoSans", 8)
-            file.drawString(100, 554, "(фамилия, имя, отчество , адрес места жительства, ОГРНИП, ИНН индивидуального " "предпринимателя,")
+            file.drawString(100, 554, "(фамилия, имя, отчество , адрес места жительства, ОГРНИП, ИНН индивидуального "
+                                      "предпринимателя,")
             file.setFont("NotoSans", 12)
             file.drawString(40, 540, designer_detail)
             file.line(40, 538, 580, 538)
@@ -135,18 +142,21 @@ def some_view(request, queryset):
             file.setFont("NotoSans", 8)
             file.drawString(475, 451, "(дата составления акта)")
             file.setFont("NotoSansregular", 11)
-            file.drawString(40, 438, "Представитель застройщика (технического заказчика, эксплуатирующей организации или реги-")
+            file.drawString(40, 438, "Представитель застройщика (технического заказчика, эксплуатирующей организации "
+                                     "или реги-")
             file.drawString(40, 425, "онального   оператора)  по вопросам  строительного контроля")
             file.setFont("NotoSans", 12)
             file.drawString(40, 411, "Заказчик строка 1")
             file.line(40, 409, 580, 409)
             file.setFont("NotoSans", 8)
-            file.drawString(70, 399, "(должность, фамилия, инициалы, идентификационный номер в национальном реестре специалистов" " в области строительства")
+            file.drawString(70, 399, "(должность, фамилия, инициалы, идентификационный номер в национальном реестре специалистов"
+                                     " в области строительства")
             file.setFont("NotoSans", 12)
             file.drawString(40, 385, customer_name + " " + customer_adr)
             file.line(40, 383, 580, 383)
             file.setFont("NotoSans", 8)
-            file.drawString(70, 373, "реквизиты распорядительного документа, подтверждающего полномочия,с указанием " "наименования, " "ОГРН, ИНН,")
+            file.drawString(70, 373, "реквизиты распорядительного документа, подтверждающего полномочия,с указанием "
+                                     "наименования, " "ОГРН, ИНН,")
             file.setFont("NotoSans", 12)
             file.drawString(40, 359, "Заказчик строка 3")
             file.line(40, 357, 580, 357)
@@ -163,26 +173,31 @@ def some_view(request, queryset):
             file.drawString(40, 295, "Строитель")
             file.line(40, 293, 580, 293)
             file.setFont("NotoSans", 8)
-            file.drawString(100, 283, "(должность, фамилия, инициалы, реквизиты распорядительного документа, подтверждающего " "полномочия)")
+            file.drawString(100, 283, "(должность, фамилия, инициалы, реквизиты распорядительного документа,"
+                                      " подтверждающего полномочия)")
             file.setFont("NotoSansregular", 11)
-            file.drawString(40, 270, "Представитель лица, осуществляющего строительство, по вопросам строительного " "контроля")
+            file.drawString(40, 270, "Представитель лица, осуществляющего строительство, по вопросам строительного " 
+                                     "контроля")
             file.setFont("NotoSans", 12)
             file.drawString(40, 256, "Организатор 1")
             file.line(40, 254, 580, 254)
             file.setFont("NotoSans", 8)
-            file.drawString(140, 244, "(должность, фамилия, инициалы, идентификационный номер в национальном реестре специалистов")
+            file.drawString(140, 244, "(должность, фамилия, инициалы, идентификационный номер в "
+                                      "национальном реестре специалистов")
             file.setFont("NotoSans", 12)
             file.drawString(40, 230, "Организатор 2")
             file.line(40, 228, 580, 228)
             file.setFont("NotoSans", 8)
-            file.drawString(140, 218, "в области строительства, реквизиты распорядительного документа, подтверждающего " "полномочия)")
+            file.drawString(140, 218, "в области строительства, реквизиты распорядительного документа, подтверждающего " 
+                                      "полномочия)")
             file.setFont("NotoSansregular", 11)
             file.drawString(40, 205, "Представитель лица, осуществляющего подготовку проектной документации")
             file.setFont("NotoSans", 12)
             file.drawString(40, 191, "Проектировщик 1")
             file.line(40, 189, 580, 189)
             file.setFont("NotoSans", 8)
-            file.drawString(70, 179, "(должность, фамилия, инициалы, инициалы, реквизиты распорядительного документа," " подтверждающего полномочия,")
+            file.drawString(70, 179, "(должность, фамилия, инициалы, инициалы, реквизиты распорядительного документа," 
+                                     " подтверждающего полномочия,")
             file.setFont("NotoSans", 12)
             file.drawString(40, 165, "Проектировщик 2")
             file.line(40, 163, 580, 163)
@@ -192,19 +207,22 @@ def some_view(request, queryset):
             file.drawString(40, 139, "Проектировщик 3")
             file.line(40, 137, 580, 137)
             file.setFont("NotoSans", 8)
-            file.drawString(140, 127, "фамилии, имени, отчества, адреса места жительства, ОГРНИП,ИНН индивидуального " "предпринимателя ,")
+            file.drawString(140, 127, "фамилии, имени, отчества, адреса места жительства, ОГРНИП,ИНН индивидуального " 
+                                      "предпринимателя ,")
             file.setFont("NotoSans", 12)
             file.drawString(40, 112, "Проектировщик 4")
             file.line(40, 110, 580, 110)
             file.setFont("NotoSans", 8)
-            file.drawString(40, 100, "наименования, ОГРН, ИНН саморегулируемой организации, членом которой, является указанное " "юридическое лицо, индивидуальный предприниматель) ")
+            file.drawString(40, 100, "наименования, ОГРН, ИНН саморегулируемой организации, членом которой, "
+                                     "является указанное юридическое лицо, индивидуальный предприниматель) ")
             file.setFont("NotoSansregular", 11)
             file.drawString(40, 87, "Представитель лица, выполнившего работы, подлежащие освидетельствованию")
             file.setFont("NotoSans", 12)
             file.drawString(40, 73, "Прораб 1")
             file.line(40, 71, 580, 71)
             file.setFont("NotoSans", 8)
-            file.drawString(70, 61, "(должность, фамилия, инициалы, реквизиты распорядительного документа, подтверждающего " "полномочия,")
+            file.drawString(70, 61, "(должность, фамилия, инициалы, реквизиты распорядительного документа, подтверждающего " 
+                                    "полномочия,")
             file.setFont("NotoSans", 12)
             file.drawString(40, 47, builder_name + " " + builder_address)
             file.line(40, 45, 580, 45)
@@ -214,19 +232,21 @@ def some_view(request, queryset):
             file.drawString(40, 21, builder_details)
             file.line(40, 19, 580, 19)
             file.setFont("NotoSans", 8)
-            file.drawString(140, 9, "фамилии, имени, отчества, адреса места жительства, ОГРНИП, ИНН индивидуального " "предпринимателя)")
+            file.drawString(140, 9, "фамилии, имени, отчества, адреса места жительства, ОГРНИП, ИНН индивидуального " 
+                                    "предпринимателя)")
 
             # Close the PDF object cleanly, and we're done.
             file.showPage()
 
             file.setFont("NotoSansregular", 11)
             file.setLineWidth(0.7)
-            file.drawString(15, 820, "а также иные представители лиц, участвующих в совидетельствовании:")
+            file.drawString(15, 820, "а также иные представители лиц, участвующих в осовидетельствовании:")
             file.setFont("NotoSans", 12)
             file.drawString(15, 806, other_people)
             file.line(15, 804, 540, 804)
             file.setFont("NotoSans", 8)
-            file.drawString(15, 794, "(должность с указанием наименования организации, фамилия, инициалы," "реквизиты распорядительного документа,")
+            file.drawString(15, 794, "(должность с указанием наименования организации, фамилия, инициалы,"
+                                     "реквизиты распорядительного документа,")
             file.drawString(15, 784, "подтверждающего полномочия)")
             file.setFont("NotoSansregular", 11)
             file.drawString(15, 771, "Произвели осмтор работ, выполненных")
@@ -247,16 +267,18 @@ def some_view(request, queryset):
             file.drawString(15, 676, "Проект 1")
             file.line(15, 674, 540, 674)
             file.setFont("NotoSans", 8)
-            file.drawString(15, 664, "(номер, другие реквизиты чертежа, наименование проектной и/или рабочей " "документации,")
+            file.drawString(15, 664, "(номер, другие реквизиты чертежа, наименование проектной и/или рабочей "
+                                     "документации,")
             file.setFont("NotoSans", 12)
             file.drawString(15, 650, "Проект 2")
             file.line(15, 648, 540, 648)
             file.setFont("NotoSans", 8)
-            file.drawString(15, 638, "сведения о лицах, осуществляющих подготовку раздела проектной и/или рабочей " "документации)")
+            file.drawString(15, 638, "сведения о лицах, осуществляющих подготовку раздела проектной и/или рабочей " 
+                                     "документации)")
             file.setFont("NotoSansregular", 11)
             file.drawString(15, 625, "3. При выполнении работ применены")
             file.setFont("NotoSans", 12)
-            file.drawString(15, 611, material_name + " (" + material_document_name + ")")
+            file.drawString(15, 611, '')
             file.line(15, 609, 540, 609)
             file.setFont("NotoSans", 8)
             file.drawString(15, 599, "(наименование строительных, материалов (изделий), реквизиты сертификатов")
@@ -266,17 +288,20 @@ def some_view(request, queryset):
             file.setFont("NotoSans", 8)
             file.drawString(15, 573, "реквизиты сертификатов их качество и безопасность)")
             file.setFont("NotoSansregular", 11)
-            file.drawString(15, 560, "4. Предъявлены документы, подтверждающие соответствие работ предъявляемым к ним " "требованиям")
+            file.drawString(15, 560, "4. Предъявлены документы, подтверждающие соответствие работ предъявляемым к ним " 
+                                     "требованиям")
             file.setFont("NotoSans", 12)
             file.drawString(15, 546, "Качество 1")
             file.line(15, 544, 540, 544)
             file.setFont("NotoSans", 8)
-            file.drawString(15, 534, "" "(исполнительные схемы и чертежи, результаты экспертиз, обследований, лабораторных")
+            file.drawString(15, 534, "" "(исполнительные схемы и чертежи, результаты экспертиз, "
+                                     "обследований, лабораторных")
             file.setFont("NotoSans", 12)
             file.drawString(15, 520, "Качество 2")
             file.line(15, 518, 540, 518)
             file.setFont("NotoSans", 8)
-            file.drawString(15, 508, "и иных испытаний выполненных работ, проведенных в процессе строительного " "контроля)")
+            file.drawString(15, 508, "и иных испытаний выполненных работ, проведенных в процессе строительного " 
+                                     "контроля)")
             file.setFont("NotoSansregular", 11)
             file.drawString(15, 495, "Даты: начала работ")
             file.drawString(135, 495, job_start_date)
@@ -301,12 +326,14 @@ def some_view(request, queryset):
             file.drawString(15, 386, job_next)
             file.line(15, 384, 540, 384)
             file.setFont("NotoSans", 8)
-            file.drawString(130, 374, "(наименование работ, конструкций, участков сетей инженерно-технического обеспечения)")
+            file.drawString(130, 374, "(наименование работ, конструкций, участков сетей "
+                                      "инженерно-технического обеспечения)")
             file.setFont("NotoSansregular", 11)
             file.drawString(15, 361, "Дополнительные сведения")
             file.drawString(15, 348, "Акт составлен в _____ экземплярах.")
             file.drawString(15, 335, "Приложения:")
-            file.drawString(15, 322, "Представитель застройщика (технического заказчика, эксплуатирующей организации или реги-")
+            file.drawString(15, 322, "Представитель застройщика (технического заказчика, эксплуатирующей "
+                                     "организации или реги-")
             file.drawString(15, 309, "онального   оператора)  по вопросам  строительного контроля")
             file.setFont("NotoSans", 12)
             file.drawString(15, 295, "Подпись 1")
@@ -321,7 +348,8 @@ def some_view(request, queryset):
             file.setFont("NotoSans", 8)
             file.drawString(200, 244, "(фамилия, инициалы, подпись)")
             file.setFont("NotoSansregular", 11)
-            file.drawString(15, 231, "Представитель    лица,    осуществляющего    строительство,   по   вопросам " "строительного контроля")
+            file.drawString(15, 231, "Представитель    лица,    осуществляющего    строительство,   по   вопросам " 
+                                     "строительного контроля")
             file.drawString(15, 218, " (специалист по организации строительства)")
             file.setFont("NotoSans", 12)
             file.drawString(15, 204, "Подпись 3")
@@ -352,8 +380,8 @@ def some_view(request, queryset):
 
             file.showPage()
 
-            # file.drawImage('file:///Users/iliavetchinin/PycharmProjects/AsBuilDoc/certifikat_sootvetstviya_obrazec_big_BEcOrtp.gif', 20, 20)
-            # file.showPage()
+            # file.drawImage('file:///Users/iliavetchinin/PycharmProjects/AsBuilDoc
+            # /certifikat_sootvetstviya_obrazec_big_BEcOrtp.gif', 20, 20) file.showPage()
             file.save()
 
             # FileResponse sets the Content-Disposition header so that browsers
