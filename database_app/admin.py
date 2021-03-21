@@ -1,7 +1,9 @@
 from django.contrib import admin
 
+from django.shortcuts import redirect
+
 from .models import *
-from .views import some_view
+from .views import DoItPdf
 
 # Register your models here.
 
@@ -42,11 +44,9 @@ make_draft.short_description = "Пометить документы как че�
 
 def export_selected_objects(modeladmin, request, queryset):
     queryset.update(status="p")
-
-    for i in queryset.values():
-        print(i["id"])
-
-    return some_view(request, queryset)
+    for i in queryset.values('id'):
+        id = i['id']
+        return DoItPdf().make_hwsc(request, id)
 
 
 export_selected_objects.short_description = "Распечатать документы"
@@ -60,7 +60,12 @@ class AdminHiddenWorksSurveyCertificate(admin.ModelAdmin):
 
 admin.site.register(HiddenWorksSurveyCertificate, AdminHiddenWorksSurveyCertificate)
 
-admin.site.register(Template)
+
+class AdminTemplate(admin.ModelAdmin):
+    list_display = ["name", "_object"]
+
+
+admin.site.register(Template, AdminTemplate)
 
 admin.site.register(ExecutiveScheme)
 admin.site.register(Trials)

@@ -24,10 +24,10 @@ class Company(models.Model):
 class People(models.Model):
     name = models.CharField(max_length=200)
     order = models.CharField(max_length=250)
-    order_file = models.FileField(blank=True)
+    order_file = models.FileField(blank=True, upload_to='documents/')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     _license = models.CharField(max_length=250)
-    _license_file = models.FileField(blank=True)
+    _license_file = models.FileField(blank=True, upload_to='documents/')
     name_for_admin = str
 
     def __str__(self):
@@ -46,7 +46,7 @@ class Job(models.Model):
 
 class Documents(models.Model):
     name = models.CharField(max_length=200)
-    file = models.FileField()
+    file = models.FileField(blank=True, upload_to='documents/')
     date_certificate_start = models.DateField(blank=True)
     date_certificate_emd = models.DateField(blank=True)
 
@@ -56,7 +56,7 @@ class Documents(models.Model):
 
 class Material(models.Model):
     name = models.CharField(max_length=200)
-    documents = models.ManyToManyField(Documents)
+    documents = models.ManyToManyField(Documents, blank=True)
 
     def __str__(self):
         return self.name
@@ -65,7 +65,7 @@ class Material(models.Model):
 class ExecutiveScheme(models.Model):
     name = models.CharField(max_length=200)
     date = models.DateField()
-    file = models.FileField()
+    file = models.FileField(blank=True, upload_to='documents/')
 
     def __str__(self):
         return self.name
@@ -74,7 +74,7 @@ class ExecutiveScheme(models.Model):
 class Trials(models.Model):
     name = models.CharField(max_length=200)
     date = models.DateField()
-    file = models.FileField()
+    file = models.FileField(blank=True, upload_to='documents/')
 
     def __str__(self):
         return self.name
@@ -86,16 +86,12 @@ class CommonFields(models.Model):
     general_contractor = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_contractor")
     designer = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_designer")
     builder = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="%(class)s_builder")
-    customer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_cust_people",
-                                        blank=True)
-    general_contractor_people = models.ForeignKey(People, on_delete=models.CASCADE,
-                                                  related_name="%(class)s_contractor_people", blank=True)
-    general_contractor_tech = models.ForeignKey(People, on_delete=models.CASCADE,
-                                                related_name="%(class)s_general_contractor_tech_people", blank=True)
-    designer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_designer_people",
-                                        blank=True)
-    builder_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_builder_people",
-                                       blank=True)
+    customer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_cust_people", blank=True)
+    general_contractor_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_contractor_people", blank=True)
+    general_contractor_tech = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_general_contractor_tech_people", blank=True)
+    designer_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_designer_people", blank=True)
+    builder_people = models.ForeignKey(People, on_delete=models.CASCADE, related_name="%(class)s_builder_people", blank=True)
+    number_of_copies = models.IntegerField()
 
     class Meta:
         abstract = True
@@ -117,6 +113,7 @@ class HiddenWorksSurveyCertificate(CommonFields):
     schemas = models.ManyToManyField(ExecutiveScheme)
     trials = models.ManyToManyField(Trials)
     other_people = models.CharField(max_length=200)
+    norma = models.CharField(max_length=350, blank=True)
 
     def __str__(self):
         return self.job.name
